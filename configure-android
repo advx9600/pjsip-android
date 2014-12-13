@@ -143,9 +143,9 @@ STDCPP_LIBS="${ANDROID_SYSROOT}/usr/lib/crtbegin_so.o -lgnustl_static"
 STDCPP_LDFLAGS="-L${STDCPP_TC_VER}/libs/${TARGET_ABI}/"
 
 # stlport
-#STDCPP_CFLAGS="-I${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/stlport"
-#STDCPP_LIBS="${ANDROID_SYSROOT}/usr/lib/crtbegin_so.o -lstlport_static -ldl"
-#STDCPP_LDFLAGS="-L${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/libs/${TARGET_ABI}"
+STDCPP_CFLAGS="-I${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/stlport"
+STDCPP_LIBS="${ANDROID_SYSROOT}/usr/lib/crtbegin_so.o -lstlport_static -ldl"
+STDCPP_LDFLAGS="-L${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/libs/${TARGET_ABI}"
 
 export CFLAGS="${CFLAGS} ${STDCPP_CFLAGS}"
 export LIBS="${STDCPP_LIBS} ${LIBS}"

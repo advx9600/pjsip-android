@@ -57,6 +57,13 @@ APP_THIRD_PARTY_LIB_FILES += $(PJ_DIR)/third_party/lib/libresample.$(SHLIB_SUFFI
 endif
 endif
 
+ifeq (1,1)
+APP_THIRD_PARTY_LIBS += -lwebrtc_video_capture -lwebrtc_video_render
+APP_THIRD_PARTY_LIBS += -lwebrtc_yuv -lyuv_static -lGLESv2
+APP_THIRD_PARTY_LIBS += -lwebrtc_system_wrappers -lwebrtc_apm_utility -lwebrtc_spl
+endif
+
+
 ifneq (@ac_no_gsm_codec@,1)
 ifeq (@ac_external_gsm@,1)
 # External GSM library

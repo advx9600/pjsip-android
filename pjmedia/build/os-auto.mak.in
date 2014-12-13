@@ -216,6 +216,9 @@ ifeq ($(AC_PJMEDIA_VIDEO_HAS_QT),yes)
 export PJMEDIA_VIDEODEV_OBJS += qt_dev.o
 endif
 
+ifeq (1,1)
+export PJMEDIA_VIDEODEV_OBJS += webrtc_android_render_dev.o 
+endif
 #
 # iOS video device
 #
