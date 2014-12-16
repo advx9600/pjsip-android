@@ -28,6 +28,9 @@
 #include <pjsua2/siptypes.hpp>
 #include <list>
 #include <map>
+#include <pjsua-lib/pjsua.h>
+#include <pjsua-lib/pjsua_internal.h>
+#include <jni.h>
 
 /** PJSUA2 API is inside pj namespace */
 namespace pj
@@ -1068,6 +1071,8 @@ public:
      * @return		The Audio Device Manager.
      */
     AudDevManager &audDevManager();
+    pj_status_t setRender(pjsua_call_id call_id, jobject window);
+    pj_status_t vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, void* window);
 
     /*************************************************************************
      * Codec management operations

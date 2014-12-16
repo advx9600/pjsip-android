@@ -1614,6 +1614,67 @@ AudDevManager &Endpoint::audDevManager()
     return audioDevMgr;
 }
 
+pj_status_t Endpoint::vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, void* window){
+	pj_status_t status = PJ_ENOTFOUND;
+#if PJMEDIA_HAS_VIDEO
+        pjsua_vid_win *w = NULL;
+        pjsua_vid_win_id wid;
+        pjmedia_vid_dev_stream *dev;
+
+        // We are looking for a rendering video dev
+        if (call_med->type == PJMEDIA_TYPE_VIDEO
+                        && (call_med->dir & dir)) {
+
+                const char* dirName = (dir == PJMEDIA_DIR_RENDER) ? "render" : "capture";
+                PJ_LOG(4, (THIS_FILE, "Has video %s media...", dirName));
+
+                wid = (dir == PJMEDIA_DIR_RENDER) ? call_med->strm.v.rdr_win_id : call_med->strm.v.cap_win_id;
+                w = &pjsua_var.win[wid];
+                // Make sure we have a render dev
+                if (w) {
+ dev = pjmedia_vid_port_get_stream( (dir == PJMEDIA_DIR_RENDER) ? w->vp_rend : w->vp_cap);
+                        if (dev) {
+                                status = pjmedia_vid_dev_stream_set_cap(dev,
+                                                PJMEDIA_VID_DEV_CAP_OUTPUT_WINDOW,
+                                                (void*) window);
+                                PJ_LOG(4, (THIS_FILE, "Set %s window >> %x - %x", dirName, dev, window));
+                        }
+                }
+        }
+
+#endif
+        return status;
+}
+
+pj_status_t Endpoint::setRender(pjsua_call_id call_id, jobject window)
+{
+	pj_status_t status = PJ_ENOTFOUND;
+#if PJMEDIA_HAS_VIDEO
+        pjsua_call *call;
+        int i;
+
+        if( !(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls) ){
+                        return PJ_ENOTFOUND;
+        }
+
+        PJ_LOG(4, (THIS_FILE, "Setup android renderer for call %d", call_id));
+        PJSUA_LOCK();
+        // Retrieve the stream
+        PJ_LOG(4, (THIS_FILE, "pjsua_call_has_media:%d",pjsua_call_has_media(call_id)));
+        if (pjsua_call_has_media(call_id)) {
+                call = &pjsua_var.calls[call_id];
+		PJ_LOG(4, (THIS_FILE, "med_cnt:%d",call->med_cnt));
+                for (i = 0; i < call->med_cnt; ++i) {
+                        pjsua_call_media *call_med = &call->media[i];
+                        vid_set_stream_window(call_med, PJMEDIA_DIR_RENDER, window);
+                        status = PJ_SUCCESS;
+                }
+        }
+PJSUA_UNLOCK();
+#endif
+
+        return status;
+}
 /*
  * Codec operations.
  */
