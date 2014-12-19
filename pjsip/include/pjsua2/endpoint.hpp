@@ -1073,6 +1073,8 @@ public:
     AudDevManager &audDevManager();
     pj_status_t setRender(pjsua_call_id call_id, jobject window);
     pj_status_t vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, void* window);
+    void setContext(jobject obj);
+    pj_status_t setCapture(jobject window);
 
     /*************************************************************************
      * Codec management operations

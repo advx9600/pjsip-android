@@ -51,6 +51,7 @@ static struct cap_info
 };
 
 
+void* gCon;
 /*
  * The device index seen by application and driver is different. 
  *
@@ -95,6 +96,7 @@ pjmedia_vid_dev_factory* pjmedia_qt_factory(pj_pool_factory *pf);
 
 #if PJMEDIA_VIDEO_DEV_HAS_WEBRTC
 pjmedia_vid_dev_factory* pjmedia_webrtc_vid_render_factory(pj_pool_factory *pf);
+pjmedia_vid_dev_factory* pjmedia_webrtc_vid_capture_factory(pj_pool_factory *pf);
 #endif
 
 #if PJMEDIA_VIDEO_DEV_HAS_IOS
@@ -390,6 +392,7 @@ PJ_DEF(pj_status_t) pjmedia_vid_dev_subsys_init(pj_pool_factory *pf)
 #endif
 #if PJMEDIA_VIDEO_DEV_HAS_WEBRTC
     vid_subsys.drv[vid_subsys.drv_cnt++].create = &pjmedia_webrtc_vid_render_factory;
+    vid_subsys.drv[vid_subsys.drv_cnt++].create = &pjmedia_webrtc_vid_capture_factory;
 #endif
 #if PJMEDIA_VIDEO_DEV_HAS_IOS
     vid_subsys.drv[vid_subsys.drv_cnt++].create = &pjmedia_ios_factory;

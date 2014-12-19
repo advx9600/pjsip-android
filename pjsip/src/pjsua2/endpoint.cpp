@@ -343,6 +343,7 @@ void EpConfig::writeObject(ContainerNode &node) const throw(Error)
 
 ///////////////////////////////////////////////////////////////////////////////
 /* Class to post log to main thread */
+extern void* gCon;
 struct PendingLog : public PendingJob
 {
     LogEntry entry;
@@ -1674,6 +1675,40 @@ PJSUA_UNLOCK();
 #endif
 
         return status;
+} 
+void Endpoint::setContext(jobject obj)
+{
+    gCon =obj;
+}
+pj_status_t Endpoint::setCapture(jobject window)
+{
+    unsigned ci, i, count;
+    pj_status_t status = PJ_ENOTFOUND;
+    pjsua_call *call;
+    pjsua_call_id calls_id[PJSUA_MAX_ACC];
+
+    count = PJ_ARRAY_SIZE(calls_id);
+    status = pjsua_enum_calls(calls_id, &count);
+    if(status != PJ_SUCCESS){
+        return status;
+    }
+
+    PJ_LOG(4, (THIS_FILE, "Setup android capturer for all calls"));
+    PJSUA_LOCK();
+    for(ci = 0; ci < count; ++ci){
+        pjsua_call_id call_id = calls_id[ci];
+        if(pjsua_call_is_active(call_id) && pjsua_call_has_media(call_id)){
+            call = &pjsua_var.calls[call_id];
+            for (i = 0; i < call->med_cnt; ++i) {
+                pjsua_call_media *call_med = &call->media[i];
+                vid_set_stream_window(call_med, PJMEDIA_DIR_CAPTURE, window);
+                status = PJ_SUCCESS;
+            }
+	}
+    }
+
+    PJSUA_UNLOCK();
+    return status;
 }
 /*
  * Codec operations.

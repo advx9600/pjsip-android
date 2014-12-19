@@ -489,8 +489,8 @@ PJ_DEF(pj_status_t) pjmedia_vid_port_stop(pjmedia_vid_port *vp)
     PJ_ASSERT_RETURN(vp, PJ_EINVAL);
 
     if (vp->clock) {
-        PJ_LOG(1,(THIS_FILE,"aaa forece remove pjmedia_clock_stop"));
-//	status = pjmedia_clock_stop(vp->clock);
+       // PJ_LOG(1,(THIS_FILE,"aaa forece remove pjmedia_clock_stop"));
+	status = pjmedia_clock_stop(vp->clock);
     }
 
     status = pjmedia_vid_dev_stream_stop(vp->strm);
