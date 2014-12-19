@@ -539,8 +539,6 @@ PjVideoCaptureDataCallback::PjVideoCaptureDataCallback(webrtc_cap_stream* strm):
 void PjVideoCaptureDataCallback::OnIncomingCapturedFrame(int id, VideoFrame &videoFrame, enum VideoCodecType codecType){
 
 	pjmedia_frame frame = {PJMEDIA_FRAME_TYPE_VIDEO};
-//	PJ_LOG(1,(THIS_FILE,"aaa videoFrame:%d",videoFrame.Size()));
-	return ;
 	#if 1
 	if (stream->cap_thread_initialized == 0 || !pj_thread_is_registered()) {
 		pj_status_t status;

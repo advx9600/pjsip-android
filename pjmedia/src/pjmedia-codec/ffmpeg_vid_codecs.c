@@ -288,7 +288,7 @@ static ffmpeg_codec_desc codec_desc[] =
 	{PJMEDIA_FORMAT_H264, PJMEDIA_RTP_PT_H264, {"H264",4},
 	 {"Constrained Baseline (level=30, pack=1)", 39}},
 	0,
-	{720, 480},	{15, 1},	256000, 256000,
+	{352, 288},	{15, 1},	256000, 256000,
 	&h264_packetize, &h264_unpacketize, &h264_preopen, &h264_postopen,
 	&pjmedia_vid_codec_h264_match_sdp,
 	/* Leading space for better compatibility (strange indeed!) */
@@ -366,7 +366,8 @@ static pj_status_t h264_preopen(ffmpeg_private *ff)
 	return PJ_ENOTSUP;
     }
     /* Better always send in single NAL mode for better compatibility */
-    pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_SINGLE_NAL;
+//    pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_SINGLE_NAL;
+    pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_NON_INTERLEAVED;
 #endif
 
     status = pjmedia_h264_packetizer_create(ff->pool, &pktz_cfg, &data->pktz);
