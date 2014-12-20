@@ -2838,8 +2838,6 @@ pj_status_t pjsua_media_channel_update(pjsua_call_id call_id,
 
 		/* Update audio channel */
 		if (media_changed) {
-		PJ_LOG(1,(THIS_FILE,"aaa before  pjsua_vid_channel_update set PJMEDI_DIR_ENCODING"));
-		si->dir=PJMEDIA_DIR_ENCODING;
 		    status = pjsua_vid_channel_update(call_med,
 						      call->inv->pool, si,
 						      local_sdp, remote_sdp);

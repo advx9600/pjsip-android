@@ -498,6 +498,20 @@ PJ_DEF(pj_status_t) pjmedia_vid_port_stop(pjmedia_vid_port *vp)
     return status;
 }
 
+PJ_DEF(pj_status_t) my_pjmedia_vid_port_stop(pjmedia_vid_port *vp)
+{
+    pj_status_t status;
+    PJ_ASSERT_RETURN(vp, PJ_EINVAL);
+
+    PJ_LOG(2,(THIS_FILE,"aaa render only one thread so don't need clock stop"));
+    if (vp->clock) {
+//        status = pjmedia_clock_stop(vp->clock);
+    }
+
+    status = pjmedia_vid_dev_stream_stop(vp->strm);
+
+    return status;
+}
 PJ_DEF(void) pjmedia_vid_port_destroy(pjmedia_vid_port *vp)
 {
     PJ_ASSERT_ON_FAIL(vp, return);
@@ -581,7 +595,7 @@ static pj_status_t client_port_event_cb(pjmedia_event *event,
         pjmedia_vid_dev_param vid_param;
         pj_status_t status;
         
-	pjmedia_vid_port_stop(vp);
+	my_pjmedia_vid_port_stop(vp);
         
         /* Retrieve the video format detail */
         vfd = pjmedia_format_get_video_format_detail(
