@@ -326,12 +326,10 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 	}
 
     pj_mutex_lock(stream->mutex);
-		PJ_LOG(4,(THIS_FILE,"1"));
 	if (!stream->is_running) {
 		pj_mutex_unlock(stream->mutex);
 		return PJ_EINVALIDOP;
 	}
-		PJ_LOG(4,(THIS_FILE,"2"));
 
 	if (frame->size == 0 || frame->buf == NULL){
 		pj_mutex_unlock(stream->mutex);
