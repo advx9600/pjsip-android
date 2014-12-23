@@ -827,7 +827,6 @@ PJ_DEF(pj_status_t) pjmedia_codec_ffmpeg_vid_init(pjmedia_vid_codec_mgr *mgr,
 
 	/* Registering format match for SDP negotiation */
 	if (desc->sdp_fmt_match) {
-	    PJ_LOG(1,(THIS_FILE,"aaa  pjmedia_sdp_neg_register_fmt_match_cb"));
 	    status = pjmedia_sdp_neg_register_fmt_match_cb(
 						&desc->info.encoding_name,
 						desc->sdp_fmt_match);
