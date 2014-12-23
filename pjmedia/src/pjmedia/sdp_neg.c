@@ -25,6 +25,8 @@
 #include <pj/string.h>
 #include <pj/ctype.h>
 #include <pj/array.h>
+#include <pj/log.h>
+#define THIS_FILE "sdp_neg.c"
 
 /**
  * This structure describes SDP media negotiator.
@@ -92,6 +94,7 @@ PJ_DEF(const char*) pjmedia_sdp_neg_state_str(pjmedia_sdp_neg_state state)
 
 
 
+static void my_set_answer(pj_pool_t *pool,pjmedia_sdp_media* answer);
 /*
  * Create with local offer.
  */
@@ -101,6 +104,7 @@ PJ_DEF(pj_status_t) pjmedia_sdp_neg_create_w_local_offer( pj_pool_t *pool,
 {
     pjmedia_sdp_neg *neg;
     pj_status_t status;
+    int i;
 
     /* Check arguments are valid. */
     PJ_ASSERT_RETURN(pool && local && p_neg, PJ_EINVAL);
@@ -109,6 +113,10 @@ PJ_DEF(pj_status_t) pjmedia_sdp_neg_create_w_local_offer( pj_pool_t *pool,
 
     /* Validate local offer. */
     PJ_ASSERT_RETURN((status=pjmedia_sdp_validate(local))==PJ_SUCCESS, status);
+    for(i=0;i<local->media_count;i++)
+    {
+	    my_set_answer(pool,local->media[i]);
+    }
 
     /* Create and initialize negotiator. */
     neg = PJ_POOL_ZALLOC_T(pool, pjmedia_sdp_neg);
