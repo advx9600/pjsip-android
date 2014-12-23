@@ -1710,6 +1710,19 @@ pj_status_t Endpoint::setCapture(jobject window)
     PJSUA_UNLOCK();
     return status;
 }
+
+extern char* gForceVidNegDir;
+void Endpoint::setForceVidDir(VID_DIR dir)
+{
+    char** set=&gForceVidNegDir;
+    switch(dir)
+    {
+	case SENDONLY:*set="sendonly";break;
+	case RECVONLY:*set="recvonly";break;
+	case INACTIVE:*set="inactive";break;
+	case SENDRECV:*set=NULL;break;
+    }
+}
 /*
  * Codec operations.
  */

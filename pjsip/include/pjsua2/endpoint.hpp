@@ -1075,6 +1075,8 @@ public:
     pj_status_t vid_set_stream_window(pjsua_call_media* call_med, pjmedia_dir dir, void* window);
     void setContext(jobject obj);
     pj_status_t setCapture(jobject window);
+    enum VID_DIR{SENDONLY,RECVONLY,SENDRECV,INACTIVE};
+    static void setForceVidDir(VID_DIR dir);
 
     /*************************************************************************
      * Codec management operations

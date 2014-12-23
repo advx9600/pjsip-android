@@ -91,6 +91,7 @@ PJ_DEF(const char*) pjmedia_sdp_neg_state_str(pjmedia_sdp_neg_state state)
 }
 
 
+
 /*
  * Create with local offer.
  */
@@ -546,7 +547,6 @@ static void remove_all_media_directions(pjmedia_sdp_media *m)
     pjmedia_sdp_media_remove_all_attr(m, "sendonly");
     pjmedia_sdp_media_remove_all_attr(m, "recvonly");
 }
-
 /* Update media direction based on peer's media direction */
 static void update_media_direction(pj_pool_t *pool,
 				   const pjmedia_sdp_media *remote,
@@ -639,6 +639,20 @@ static void update_media_direction(pj_pool_t *pool,
 }
 
 
+char* gForceVidNegDir=NULL;
+static void my_set_answer(pj_pool_t *pool,pjmedia_sdp_media* answer)
+{
+    #if 1
+    pj_str_t video={"video",5};
+    const char* dir=gForceVidNegDir;
+    pjmedia_sdp_attr *a =NULL;
+    if (dir != NULL && !pj_strcmp(&video,&answer->desc.media)){
+        remove_all_media_directions(answer);
+        a = pjmedia_sdp_attr_create(pool, dir, NULL);
+        pjmedia_sdp_media_add_attr(answer, a);
+    }
+    #endif
+}
 /* Update single local media description to after receiving answer
  * from remote.
  */
@@ -1284,7 +1298,7 @@ static pj_status_t match_offer(pj_pool_t *pool,
     apply_answer_symmetric_pt(pool, answer, pt_answer_count,
 			      pt_offer, pt_answer);
 #endif
-
+    my_set_answer(pool,answer);
     /* Update media direction. */
     update_media_direction(pool, offer, answer);
 
